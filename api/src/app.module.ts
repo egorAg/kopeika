@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/user/users.module';
 
 @Module({
   imports: [
@@ -19,6 +19,7 @@ import { UsersModule } from './users/users.module';
         username: config.get<string>('POSTGRES_USER', 'kopeika'),
         password: config.get<string>('POSTGRES_PASSWORD', 'kopeika'),
         database: config.get<string>('POSTGRES_DB', 'kopeika'),
+        entities: ['./modules/domain/entities/*.ts'],
         autoLoadEntities: true,
         synchronize: false,
       }),
@@ -28,4 +29,4 @@ import { UsersModule } from './users/users.module';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
