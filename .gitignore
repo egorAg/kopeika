@@ -1,0 +1,6 @@
+/.idea
+/api/dist
+/api/node_modules
+/api/yarn.lock
+/.env
+/api/.env
