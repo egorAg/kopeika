@@ -3,12 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/user/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { SharedAuthModule } from '@shared/auth/shared-auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['../.env'],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -24,6 +25,8 @@ import { UsersModule } from './modules/user/users.module';
         synchronize: false,
       }),
     }),
+    AuthModule,
+    SharedAuthModule,
     UsersModule,
   ],
   controllers: [],
