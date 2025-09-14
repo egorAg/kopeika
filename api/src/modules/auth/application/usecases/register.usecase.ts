@@ -20,11 +20,18 @@ export class RegisterUseCase {
     if (exists) EmailAlreadyInUseException();
 
     const hash = await this.passwords.hash(dto.password);
-    const user = await this.users.create({ email: dto.email, password: hash });
+    const user = await this.users.create({
+      email: dto.email,
+      password: hash,
+      registeredVia: 'email',
+      status: 'active',
+    });
 
     return {
       id: user.id,
       email: user.email,
+      isActive: user.status,
+      registeredVia: user.registeredVia,
       createdAt: user.createdAt.toISOString(),
     };
   }

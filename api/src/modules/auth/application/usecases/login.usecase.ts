@@ -9,6 +9,8 @@ import type { IUserRepository } from '../../../user/domain/repositories/user.rep
 import { LoginDto } from '../../interfaces/dtos/login.dto';
 import { RefreshHashService } from '../../domain/services/refresh-hash.service';
 import { InvalidCredentials } from '@shared/exceptions/invalid-credentials.exception';
+import { IsUserBlockedGuard } from '@shared/validators/is-user-blocked.guard';
+import { LoginSchema } from '../../interfaces/schemas/login.schema';
 
 @Injectable()
 export class LoginUseCase {
@@ -26,9 +28,14 @@ export class LoginUseCase {
     this.refreshTtlDays = this.config.get<number>('REFRESH_TTL_DAYS', 30);
   }
 
-  async execute(dto: LoginDto, ctx?: { ip?: string; userAgent?: string }) {
+  async execute(
+    dto: LoginDto,
+    ctx?: { ip?: string; userAgent?: string },
+  ): Promise<LoginSchema> {
     const user = await this.users.findByEmail(dto.email);
     if (!user) throw InvalidCredentials();
+
+    IsUserBlockedGuard(user);
 
     const ok = await this.password.compare(dto.password, user.password);
     if (!ok) throw InvalidCredentials();
@@ -60,7 +67,7 @@ export class LoginUseCase {
     const refreshToken = `${session.id}.${randomPart}`;
 
     return {
-      user: { id: user.id, email: user.email },
+      user: { id: user.id, email: user.email, isActive: user.status },
       accessToken,
       refreshToken,
       accessTokenExpiresIn: this.config.get<string>(

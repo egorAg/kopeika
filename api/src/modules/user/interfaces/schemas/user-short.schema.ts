@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import type { UserStatus } from '../../domain/entities/user.entity';
 
 export class UserShortSchema {
   @ApiProperty({
@@ -14,4 +15,12 @@ export class UserShortSchema {
     description: 'Уникальная электронная почта пользователя',
   })
   email: string;
+
+  @ApiProperty({
+    example: 'active',
+    title: 'Статус пользователя',
+    description: 'Заблокирован, отключен или активен ли пользователь в системе',
+    enum: ['active', 'inactive', 'blocked'],
+  })
+  isActive: UserStatus;
 }

@@ -2,11 +2,13 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AccessTokenGuard } from './access-token.guard';
+import { UsersModule } from '../../modules/user/users.module';
 
 @Global()
 @Module({
   imports: [
     ConfigModule,
+    UsersModule,
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
