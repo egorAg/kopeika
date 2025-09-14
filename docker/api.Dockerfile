@@ -13,3 +13,6 @@ COPY --from=builder /app/dist ./dist
 COPY ./api/package*.json ./
 RUN npm install
 CMD ["node", "dist/main.js"]
+
+# Автозапуск миграций перед стартом
+CMD ["sh", "-c", "npm run migration:run && node dist/main.js"]
