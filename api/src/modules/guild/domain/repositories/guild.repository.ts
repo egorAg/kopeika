@@ -6,6 +6,7 @@ export interface IGuildRepository {
   create(data: Partial<Guild>): Promise<Guild>;
   update(id: string, data: Partial<Guild>): Promise<Guild>;
   delete(id: string): Promise<void>;
+  updateBalance(id: string, balance: number): Promise<void>;
 }
 
 export const GUILD_REPOSITORY = Symbol('GUILD_REPOSITORY');

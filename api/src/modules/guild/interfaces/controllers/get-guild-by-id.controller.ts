@@ -27,13 +27,16 @@ export class GetGuildByIdController {
     @Param('id') guildId: string,
     @GetCurrentUser() user: CurrentUser,
   ): Promise<GuildDetailSchema> {
-    const guild = await this.usecase.execute(guildId, user.userId);
+    const { guild, totalBalance } = await this.usecase.execute(
+      guildId,
+      user.userId,
+    );
 
     return {
       id: guild.id,
       name: guild.name,
       dailyMinAmount: guild.dailyMinAmount,
-      balance: guild.balance,
+      balance: totalBalance,
       createdAt: guild.createdAt,
       updatedAt: guild.updatedAt,
       users: guild.users.map((guildUser) => ({

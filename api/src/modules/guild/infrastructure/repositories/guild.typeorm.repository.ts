@@ -14,7 +14,7 @@ export class GuildTypeormRepository implements IGuildRepository {
   async findById(id: string): Promise<Guild | null> {
     return this.repo.findOne({
       where: { id },
-      relations: ['users', 'history', 'users.user'],
+      relations: ['users', 'history', 'users.user', 'chests'],
     });
   }
 
@@ -40,5 +40,9 @@ export class GuildTypeormRepository implements IGuildRepository {
 
   async delete(id: string): Promise<void> {
     await this.repo.delete(id);
+  }
+
+  async updateBalance(id: string, balance: number): Promise<void> {
+    await this.repo.update({ id }, { balance });
   }
 }

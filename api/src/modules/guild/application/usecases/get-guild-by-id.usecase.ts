@@ -14,7 +14,10 @@ export class GetGuildByIdUseCase {
     @Inject(GUILD_REPOSITORY) private readonly guilds: IGuildRepository,
   ) {}
 
-  async execute(guildId: string, userId: string): Promise<Guild> {
+  async execute(
+    guildId: string,
+    userId: string,
+  ): Promise<{ guild: Guild; totalBalance: number }> {
     const guild = await this.guilds.findById(guildId);
 
     if (!guild) {
@@ -26,6 +29,12 @@ export class GetGuildByIdUseCase {
       throw new ForbiddenException('Нет доступа к этой гильдии');
     }
 
-    return guild;
+    let totalBalance: number = 0;
+
+    guild.chests.forEach((chest) => (totalBalance += +chest.balance));
+
+    await this.guilds.updateBalance(guildId, totalBalance);
+
+    return { guild, totalBalance };
   }
 }
