@@ -1,25 +1,16 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RequestWithUser } from './request-with-user';
 import { AccessTokenPayload } from '../../modules/auth/domain/models/access-token-payload';
-import { IsUserBlockedGuard } from '@shared/validators/is-user-blocked.guard';
-import { USER_REPOSITORY } from 'src/modules/user/domain/repositories/user.repository';
-import type { IUserRepository } from 'src/modules/user/domain/repositories/user.repository';
-import { User } from '../../modules/user/domain/entities/user.entity';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
-  constructor(
-    private readonly jwt: JwtService,
-    @Inject(USER_REPOSITORY)
-    private readonly users: IUserRepository,
-  ) {}
+  constructor(private readonly jwt: JwtService) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest<RequestWithUser>();
@@ -33,13 +24,11 @@ export class AccessTokenGuard implements CanActivate {
 
     try {
       const payload = await this.jwt.verifyAsync<AccessTokenPayload>(token);
-      const user = await this.users.findById(payload.sub);
-      IsUserBlockedGuard(user as User);
       req.user = {
-        userId: user!.id,
+        userId: payload.sub,
         sessionId: payload.sid,
-        email: user!.email,
-        isActive: user!.status,
+        email: payload.email,
+        status: 'active', // перехватится дальше мидлваром и поставит актуальный статус
       };
       return true;
     } catch (err) {

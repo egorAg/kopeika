@@ -10,6 +10,16 @@ export class UserTypeormRepository implements IUserRepository {
     @InjectRepository(User) private readonly repo: Repository<User>,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  findByPhone(phone: string): Promise<User | null> {
+    throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  update(id: string, data: Partial<User>): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+
   async findByEmail(email: string) {
     return this.repo.findOne({ where: { email } });
   }

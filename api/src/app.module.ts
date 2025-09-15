@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/user/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SharedAuthModule } from '@shared/auth/shared-auth.module';
+import { GuildModule } from './modules/guild/guild.module';
+import { UserStatusInterceptor } from './modules/auth/interceptors/user-status.interceptors';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -28,8 +31,14 @@ import { SharedAuthModule } from '@shared/auth/shared-auth.module';
     AuthModule,
     SharedAuthModule,
     UsersModule,
+    GuildModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UserStatusInterceptor,
+    },
+  ],
 })
 export class AppModule {}

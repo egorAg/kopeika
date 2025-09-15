@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { GuildUser } from '../../../guild/domain/entities/guild-user.entity';
 
 export type UserStatus = 'active' | 'inactive' | 'blocked';
 export type UserRegisteredVia = 'email' | 'phone';
@@ -47,7 +49,9 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // последний вход
   @Column({ type: 'timestamptz', nullable: true })
   lastLoginAt?: Date;
+
+  @OneToMany(() => GuildUser, (gu) => gu.user)
+  guilds: GuildUser[];
 }
