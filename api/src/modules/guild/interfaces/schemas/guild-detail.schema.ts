@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { GuildUserSchema } from './guild-user.schema';
 
-export class GuildSchema {
+export class GuildDetailSchema {
   @ApiProperty({ example: 'uuid-guild-id' })
   id: string;
 
@@ -10,9 +11,15 @@ export class GuildSchema {
   @ApiProperty({ example: 1000 })
   dailyMinAmount: number;
 
-  @ApiProperty({ example: 0 })
+  @ApiProperty({ example: 15000 })
   balance: number;
 
   @ApiProperty({ example: '2025-09-15T12:00:00.000Z' })
   createdAt: Date;
+
+  @ApiProperty({ example: '2025-09-15T12:00:00.000Z' })
+  updatedAt: Date;
+
+  @ApiProperty({ type: [GuildUserSchema] })
+  users: GuildUserSchema[];
 }

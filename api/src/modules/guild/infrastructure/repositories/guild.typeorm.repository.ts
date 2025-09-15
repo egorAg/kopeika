@@ -14,7 +14,7 @@ export class GuildTypeormRepository implements IGuildRepository {
   async findById(id: string): Promise<Guild | null> {
     return this.repo.findOne({
       where: { id },
-      relations: ['users', 'history'],
+      relations: ['users', 'history', 'users.user'],
     });
   }
 

@@ -27,6 +27,6 @@ export class CreateGuildUseCase {
 
     await this.guildUsers.addUserToGuild(currentUser.userId, guild.id);
 
-    return { ...guild, createdAt: guild.createdAt.toISOString() };
+    return guild;
   }
 }

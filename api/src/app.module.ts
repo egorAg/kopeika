@@ -8,6 +8,7 @@ import { SharedAuthModule } from '@shared/auth/shared-auth.module';
 import { GuildModule } from './modules/guild/guild.module';
 import { UserStatusInterceptor } from './modules/auth/interceptors/user-status.interceptors';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ChestModule } from './modules/chest/chest.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     SharedAuthModule,
     UsersModule,
     GuildModule,
+    ChestModule,
   ],
   controllers: [],
   providers: [

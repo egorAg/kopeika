@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { GuildUser } from './guild-user.entity';
 import { GuildBalanceHistory } from './guild-balance-history.entity';
+import { Chest } from '../../../chest/domain/entities/chest.entity';
 
 @Entity('guilds')
 export class Guild {
@@ -28,6 +29,9 @@ export class Guild {
 
   @OneToMany(() => GuildBalanceHistory, (h) => h.guild)
   history: GuildBalanceHistory[];
+
+  @OneToMany(() => Chest, (chest) => chest.guild)
+  chests: Chest[];
 
   @CreateDateColumn()
   createdAt: Date;
